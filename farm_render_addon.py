@@ -20,29 +20,38 @@ from bpy.props import StringProperty, IntProperty, EnumProperty
 def detect_render_devices():
     """Retourne la liste des périphériques de calcul disponibles (CPU, GPU, etc.)"""
     devices = []
-    prefs = bpy.context.preferences.addons["cycles"].preferences
 
-    # Détecter les types possibles (OPTIX, CUDA, HIP, METAL, ONEAPI)
-    for device_type in ["OPTIX", "CUDA", "HIP", "METAL", "ONEAPI"]:
-        prefs.compute_device_type = device_type
-        try:
-            bpy.context.preferences.addons["cycles"].preferences.get_devices()
-            for dev in prefs.devices:
-                if dev.use:  # activé
-                    devices.append((f"{device_type}:{dev.name}", f"{dev.name} ({device_type})", ""))
-        except:
-            continue
+    try:
+        # Vérifie que Cycles est dispo
+        if "cycles" not in bpy.context.preferences.addons:
+            return [("CPU:CPU", "CPU (par défaut)", "")]
 
-    # Ajouter CPU toujours présent
-    devices.append(("CPU:CPU", "CPU (Central Processing Unit)", ""))
+        prefs = bpy.context.preferences.addons["cycles"].preferences
 
-    # Supprimer doublons et renvoyer la liste unique
-    unique_devices = []
-    for d in devices:
-        if d not in unique_devices:
-            unique_devices.append(d)
-    return unique_devices if unique_devices else [("CPU:CPU", "CPU (par défaut)", "")]
+        for device_type in ["OPTIX", "CUDA", "HIP", "METAL", "ONEAPI"]:
+            prefs.compute_device_type = device_type
+            try:
+                bpy.context.preferences.addons["cycles"].preferences.get_devices()
+                for dev in prefs.devices:
+                    if dev.type != "CPU":
+                        devices.append((f"{device_type}:{dev.name}", f"{dev.name} ({device_type})", ""))
+            except:
+                continue
 
+        # Ajouter le CPU toujours présent
+        devices.append(("CPU:CPU", "CPU (Central Processing Unit)", ""))
+
+        # Supprimer doublons
+        unique_devices = []
+        for d in devices:
+            if d not in unique_devices:
+                unique_devices.append(d)
+
+        return unique_devices or [("CPU:CPU", "CPU (par défaut)", "")]
+
+    except Exception as e:
+        print(f"[FarmRender] ⚠️ Erreur détection GPU : {e}")
+        return [("CPU:CPU", "CPU (par défaut)", "")]
 
 # --- Fonction principale de rendu ---
 def render_single_frame(blender_path, file_path, output_dir, frame_number, device_type):
@@ -144,7 +153,8 @@ class FarmRenderSettings(bpy.types.PropertyGroup):
     device_choice: EnumProperty(
         name="Périphérique de rendu",
         items=detect_render_devices,
-        description="Choisis le périphérique (GPU/CPU) pour le rendu"
+        description="Choisis le périphérique (GPU/CPU) pour le rendu",
+        update=lambda self, context: print(f"[FarmRender] Appareil sélectionné : {self.device_choice}")
     )
     session_name: StringProperty(
         name="Nom de la session",
