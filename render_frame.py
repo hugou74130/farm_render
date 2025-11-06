@@ -3,13 +3,13 @@ import os
 import sys
 
 # --- À CONFIGURER PAR VOUS ---
-BLENDER_EXE_PATH = r"C:\Program Files\Blender Foundation\Blender 4.1\blender.exe"
-BLEND_FILE_PATH = r"D:\MesProjets\Tests\ma_scene.blend"
+BLENDER_EXE_PATH = r"C:\Users\Hugor\Desktop\blender-4.4.0-windows-x64\blender.exe"
+BLEND_FILE_PATH = r"D:\animation\testrender.blend"
 
 # Définir la plage que vous voulez rendre
 # range(10, 21) signifie : de 10 jusqu'à 21 (exclu),
 # donc 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20.
-FRAMES_TO_RENDER = range(10, 21)
+FRAMES_TO_RENDER = range(0, 5)
 # --- FIN DE LA CONFIGURATION ---
 
 
