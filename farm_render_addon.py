@@ -17,10 +17,9 @@ from bpy.props import StringProperty, IntProperty, EnumProperty
 
 
 # --- 🔍 Détection automatique des GPU ---
-def detect_render_devices():
+def detect_render_devices(self, context):
     """Retourne la liste des périphériques de calcul disponibles (CPU, GPU, etc.)"""
     devices = []
-
     try:
         # Vérifie que Cycles est dispo
         if "cycles" not in bpy.context.preferences.addons:
@@ -31,7 +30,7 @@ def detect_render_devices():
         for device_type in ["OPTIX", "CUDA", "HIP", "METAL", "ONEAPI"]:
             prefs.compute_device_type = device_type
             try:
-                bpy.context.preferences.addons["cycles"].preferences.get_devices()
+                prefs.get_devices()
                 for dev in prefs.devices:
                     if dev.type != "CPU":
                         devices.append((f"{device_type}:{dev.name}", f"{dev.name} ({device_type})", ""))
@@ -48,10 +47,10 @@ def detect_render_devices():
                 unique_devices.append(d)
 
         return unique_devices or [("CPU:CPU", "CPU (par défaut)", "")]
-
     except Exception as e:
         print(f"[FarmRender] ⚠️ Erreur détection GPU : {e}")
         return [("CPU:CPU", "CPU (par défaut)", "")]
+
 
 # --- Fonction principale de rendu ---
 def render_single_frame(blender_path, file_path, output_dir, frame_number, device_type):
@@ -152,10 +151,10 @@ class FarmRenderSettings(bpy.types.PropertyGroup):
     )
     device_choice: EnumProperty(
         name="Périphérique de rendu",
-        items=detect_render_devices,
-        description="Choisis le périphérique (GPU/CPU) pour le rendu",
-        update=lambda self, context: print(f"[FarmRender] Appareil sélectionné : {self.device_choice}")
-    )
+        items=detect_render_devices,  # maintenant sous forme de callback
+        description="Choisis le périphérique (GPU/CPU) pour le rendu"
+)
+
     session_name: StringProperty(
         name="Nom de la session",
         default="session_" + datetime.now().strftime("%Y%m%d_%H%M%S")
