@@ -15,30 +15,31 @@ FRAMES_TO_RENDER = range(0, 5)
 
 def render_single_frame(blender_path, file_path, frame_number):
     """
-    Lance le rendu d'UNE SEULE image de Blender en ligne de commande.
-    C'est la fonction de notre script précédent.
+    Lance le rendu d'une seule image avec un dossier de sortie personnalisé.
     """
     print(f"--- Lancement Tâche : Image {frame_number} ---")
 
-    # (On omet les vérifications de fichiers pour garder l'exemple court)
-    # ...
+    # Dossier où tu veux stocker les frames rendues
+    OUTPUT_DIR = r"D:\animation\renders"
+
+    # Crée le dossier s'il n'existe pas
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    # Chemin de sortie (Blender utilise # pour le numéro de frame)
+    output_path = os.path.join(OUTPUT_DIR, "frame_####")
 
     command = [
         blender_path,
-        "-b",
-        file_path,
-        "-f",               # "-f" pour "frame" (une seule image)
-        str(frame_number)
+        "-b", file_path,
+        "-o", output_path,  # <- dossier de sortie
+        "-f", str(frame_number)
     ]
 
     print(f"Commande : {' '.join(command)}")
 
     try:
-        # On lance Blender, il rend UNE image, puis se ferme.
         result = subprocess.run(command, check=True, capture_output=True, text=True, encoding='utf-8')
         print(f"--- Tâche Terminée : Image {frame_number} (Succès) ---")
-        # Afficher juste un extrait de la sortie pour ne pas surcharger
-        # print(result.stdout)
         return True
     except subprocess.CalledProcessError as e:
         print(f"!!! ERREUR Tâche : Image {frame_number} (Échec) !!!")
@@ -47,7 +48,7 @@ def render_single_frame(blender_path, file_path, frame_number):
     except Exception as e:
         print(f"Une erreur inattendue est survenue : {e}")
         return False
-
+    
 # --- Point d'entrée principal ---
 if __name__ == "__main__":
     print(f"--- Démarrage du Simulateur de Ferme ---")
