@@ -207,23 +207,57 @@ class FARMRENDER_PT_Panel(bpy.types.Panel):
         layout = self.layout
         prefs = context.scene.farm_render_settings
 
-        layout.prop(prefs, "output_dir")
-        layout.prop(prefs, "start_frame")
-        layout.prop(prefs, "end_frame")
-        layout.prop(prefs, "thread_count")
-        layout.prop(prefs, "device_choice")
-        layout.prop(prefs, "session_name")
+        # --- Section 1 : Configuration du rendu ---
+        box = layout.box()
+        box.label(text="⚙️ Configuration du rendu", icon="RENDER_STILL")
+        box.prop(prefs, "output_dir")
+        
+        row = box.row()
+        row.prop(prefs, "start_frame")
+        row.prop(prefs, "end_frame")
+        
+        box.prop(prefs, "session_name")
+        box.prop(prefs, "thread_count")
+        box.prop(prefs, "device_choice")
+
+        # Bouton pour rafraîchir la liste GPU
+        row_refresh = box.row()
+        row_refresh.operator("farmrender.refresh_devices", icon="FILE_REFRESH")
 
         layout.separator()
-        layout.operator("farmrender.run", icon="RENDER_ANIMATION")
-        layout.operator("farmrender.open_folder", icon="FILE_FOLDER")
 
+        # --- Section 2 : Contrôle ---
+        box_control = layout.box()
+        box_control.label(text="▶️ Contrôle du rendu", icon="RENDER_ANIMATION")
+        box_control.operator("farmrender.run", icon="RENDER_ANIMATION")
+        box_control.operator("farmrender.open_folder", icon="FILE_FOLDER")
+
+        layout.separator()
+
+        # --- Section 3 : Informations ---
+        box_info = layout.box()
+        box_info.label(text="ℹ️ Informations")
+        total_frames = prefs.end_frame - prefs.start_frame + 1
+        box_info.label(text=f"Frames à rendre : {total_frames}")
+        box_info.label(text=f"Périphérique actif : {prefs.device_choice}")
+
+class FARMRENDER_OT_RefreshDevices(bpy.types.Operator):
+    bl_idname = "farmrender.refresh_devices"
+    bl_label = "Rafraîchir GPU"
+
+    def execute(self, context):
+        prefs = context.scene.farm_render_settings
+        # Force la mise à jour de l’EnumProperty
+        prefs.device_choice = prefs.device_choice  # Réaffiche le menu
+        self.report({'INFO'}, "Liste des périphériques mise à jour.")
+        return {'FINISHED'}
 
 # --- Register ---
 classes = [
     FarmRenderSettings,
     FARMRENDER_OT_Run,
     FARMRENDER_OT_OpenFolder,
+    FARMRENDER_OT_RefreshDevices,
     FARMRENDER_PT_Panel,
 ]
 
