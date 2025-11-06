@@ -158,7 +158,7 @@ class FarmRenderSettings(bpy.types.PropertyGroup):
     )
     session_name: StringProperty(
         name="Nom de la session",
-        default=lambda: "session_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+        default="session_" + datetime.now().strftime("%Y%m%d_%H%M%S")
     )
 
 
