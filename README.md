@@ -16,7 +16,6 @@
 [![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/hugou74130/farm_render)
 [![GitHub Issues](https://img.shields.io/github/issues/hugou74130/farm_render.svg)](https://github.com/hugou74130/farm_render/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/hugou74130/farm_render.svg)](https://github.com/hugou74130/farm_render/pulls)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 </div>
 
@@ -31,7 +30,6 @@
 - [Usage](#usage)
 - [Architecture](#architecture)
 - [Contributing](#contributing)
-- [License](#license)
 
 ---
 
@@ -152,7 +150,7 @@ The addon will now appear in your Blender interface as a new panel on the right 
 └────────┬────────┘
          │
     ┌────┴──────┬─────────────┐
-    │            │             │
+    │           │             │
 ┌───▼──┐   ┌────▼──┐   ┌─────▼───┐
 │Worker│   │Worker │   │ Worker  │
 │ 1    │   │  2    │   │   3     │
