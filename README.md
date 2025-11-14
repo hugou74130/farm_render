@@ -1,4 +1,4 @@
-# Project Title
+# Render Farm
 
 ## Table of Contents
 
@@ -9,38 +9,37 @@
 
 ## About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+ces projet a pour but de cree une ferme de rendu pour maximiser et optimiser les temps de rendu sur blender
 
 ## Getting Started <a name = "getting_started"></a>
+Les rendu sur blender son assez long et faut avoir une bon gpu pour pouvoir faire des rendu de qualiter rapidement le but de la farm de rendu et que plusieur appareil ce connecte sur le meme projet et ce repartie les taches pour pouvoir faire le rendu beaucoup plus rapidement
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them.
+my repos
+```
+git clone https://github.com/hugou74130/farm_render.git
+```
 
+Blender (arch)
 ```
-Give examples
+sudo pacman -S blender
 ```
+blender (windows)
+```
+https://www.blender.org/
+```
+
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
+ces assez simple apres avoir telecharger mon repos
 
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
 
 ```
-until finished
+git clone https://github.com/hugou74130/farm_render.git
 ```
-
-End with an example of getting some data out of the system or using it for a little demo.
-
-## Usage <a name = "usage"></a>
-
-Add notes about how to use the system.
+vous avez juste a aller sur vos preference dans blender
+aller dans add on
+ajouter et ajouter le .py et il sera mi automatiquement a coter sur votre barre a droite
